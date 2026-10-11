@@ -1,5 +1,5 @@
-import { type FormEvent, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { type FormEvent, useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   Check,
@@ -19,9 +19,10 @@ import {
 } from 'lucide-react';
 import { services } from './data/services';
 import { products } from './data/products';
+import { latestCollection } from './data/latestCollection';
 import { buildWhatsAppUrl } from './utils/whatsapp';
 
-type ProductFilter = 'All' | 'Custom Wear' | 'Headpieces' | 'Accessories' | 'Bridal Fans';
+type ProductFilter = 'All' | 'Latest Collection' | 'Custom Wear' | 'Headpieces' | 'Accessories' | 'Bridal Fans';
 
 type FormState = {
   name: string;
@@ -62,7 +63,15 @@ const steps = [
   { title: 'Confirm Your Order', text: 'Discuss measurements, design preferences, availability, pricing, and collection or delivery arrangements directly with Crown & Stitch.' },
 ];
 
-const galleryFilters: ProductFilter[] = ['All', 'Custom Wear', 'Headpieces', 'Accessories', 'Bridal Fans'];
+const galleryFilters: ProductFilter[] = ['All', 'Latest Collection', 'Custom Wear', 'Headpieces', 'Accessories', 'Bridal Fans'];
+
+const heroLooks = [
+  { image: '/images/work/latest-collection/collection-12.jpeg', label: 'A bold look in colour' },
+  { image: '/images/work/latest-collection/collection-13.jpeg', label: 'A fresh tailored style' },
+  { image: '/images/work/latest-collection/collection-17.jpeg', label: 'An elegant occasion look' },
+  { image: '/images/work/latest-collection/collection-18.jpeg', label: 'Print with a modern touch' },
+  { image: '/images/work/latest-collection/collection-19.jpeg', label: 'Style for every occasion' },
+];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -72,6 +81,7 @@ const fadeUp = {
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<ProductFilter>('All');
+  const [activeHeroLook, setActiveHeroLook] = useState(0);
   const [formState, setFormState] = useState<FormState>({
     name: '',
     contactMethod: 'WhatsApp',
@@ -81,9 +91,23 @@ export default function App() {
   });
 
   const filteredProducts = useMemo(() => {
-    if (activeFilter === 'All') return products;
-    return products.filter((product) => product.category === activeFilter);
+    const allProducts = [...products, ...latestCollection];
+    if (activeFilter === 'All') return allProducts;
+    if (activeFilter === 'Latest Collection') {
+      return allProducts.filter((product) => product.collection === 'Latest Collection');
+    }
+    return allProducts.filter((product) => product.category === activeFilter);
   }, [activeFilter]);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const interval = window.setInterval(() => {
+      setActiveHeroLook((current) => (current + 1) % heroLooks.length);
+    }, 5500);
+
+    return () => window.clearInterval(interval);
+  }, []);
 
   const handleChange = (field: keyof FormState, value: string) => {
     setFormState((current) => ({ ...current, [field]: value }));
@@ -225,11 +249,38 @@ export default function App() {
             >
               <div className="absolute -inset-4 rounded-[28px] bg-[radial-gradient(circle,rgba(196,154,58,0.25),transparent_65%)] blur-3xl" aria-hidden="true" />
               <div className="relative overflow-hidden rounded-[30px] border border-[#c49a3a]/80 bg-[#3b0715] p-4 shadow-[0_35px_80px_rgba(59,7,21,0.28)]">
-                <img
-                  src="/images/work/custom-gown-purple-front.jpeg"
-                  alt="A richly colored custom gown displayed on a mannequin"
-                  className="h-[620px] w-full rounded-[24px] object-cover"
-                />
+                <div className="relative">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={heroLooks[activeHeroLook].image}
+                      src={heroLooks[activeHeroLook].image}
+                      alt={heroLooks[activeHeroLook].label}
+                      initial={{ opacity: 0, scale: 1.03 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.65, ease: 'easeInOut' }}
+                      className="h-[620px] w-full rounded-[24px] object-cover"
+                      fetchPriority="high"
+                    />
+                  </AnimatePresence>
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 rounded-b-[24px] bg-gradient-to-t from-[#24040d]/85 to-transparent px-6 pb-6 pt-16">
+                    <span className="font-display text-2xl text-[#fff8f1]">{heroLooks[activeHeroLook].label}</span>
+                    <div className="flex shrink-0 gap-2" aria-label="Homepage featured looks">
+                      {heroLooks.map((look, index) => (
+                        <button
+                          key={look.image}
+                          type="button"
+                          aria-label={`Show ${look.label}`}
+                          aria-pressed={activeHeroLook === index}
+                          onClick={() => setActiveHeroLook(index)}
+                          className={`h-2.5 w-2.5 rounded-full border border-[#fff8f1] transition ${
+                            activeHeroLook === index ? 'bg-[#e5c98b]' : 'bg-[#3b0715]/50'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -302,8 +353,11 @@ export default function App() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-sm font-semibold tracking-[0.22em] text-[#3b0715] uppercase">Featured Collection</p>
+                <p className="text-sm font-semibold tracking-[0.22em] text-[#3b0715] uppercase">Our Work Gallery</p>
                 <h2 className="mt-3 font-display text-4xl text-[#3b0715] sm:text-5xl">Elegance in Every Detail</h2>
+                <p className="mt-3 text-sm text-[#4a0b1c]">
+                  Browse all {products.length + latestCollection.length} looks and handmade pieces.
+                </p>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -312,6 +366,7 @@ export default function App() {
                     key={filter}
                     type="button"
                     onClick={() => setActiveFilter(filter)}
+                    aria-pressed={activeFilter === filter}
                     className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                       activeFilter === filter
                         ? 'border-[#c49a3a] bg-[#3b0715] text-[#f8f0e3]'

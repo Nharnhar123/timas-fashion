@@ -4,6 +4,7 @@ export type Product = {
   category: 'Custom Wear' | 'Headpieces' | 'Accessories' | 'Bridal Fans';
   image: string;
   description: string;
+  collection?: 'Latest Collection';
 };
 
 export const products: Product[] = [
