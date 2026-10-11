@@ -69,35 +69,6 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-function WorkPhotoPlaceholder({ label, className = '' }: { label: string; className?: string }) {
-  return (
-    <div
-      role="img"
-      aria-label={`Photos of ${label} from Crown & Stitch are coming soon`}
-      className={`relative isolate flex items-center justify-center overflow-hidden bg-[#3b0715] text-center ${className}`}
-    >
-      <div
-        className="absolute inset-0 z-0 opacity-75"
-        aria-hidden="true"
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(45deg, transparent 0 18px, rgba(196,154,58,0.7) 18px 22px, transparent 22px 40px), repeating-linear-gradient(-45deg, transparent 0 30px, rgba(26,91,53,0.65) 30px 36px, transparent 36px 56px)',
-        }}
-      />
-      <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#24040d]/90 via-[#3b0715]/35 to-[#3b0715]/15" aria-hidden="true" />
-      <div className="relative z-10 max-w-sm px-6 py-8 text-[#fff8f1]">
-        <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-[#e5c98b] bg-[#3b0715]/70 text-[#e5c98b]">
-          <Scissors size={20} />
-        </span>
-        <p className="font-display text-2xl">{label}</p>
-        <p className="mt-2 text-sm leading-relaxed text-[#f5e7d2]">
-          Our work photos are coming soon from Akwatia Akwadum.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<ProductFilter>('All');
@@ -254,7 +225,11 @@ export default function App() {
             >
               <div className="absolute -inset-4 rounded-[28px] bg-[radial-gradient(circle,rgba(196,154,58,0.25),transparent_65%)] blur-3xl" aria-hidden="true" />
               <div className="relative overflow-hidden rounded-[30px] border border-[#c49a3a]/80 bg-[#3b0715] p-4 shadow-[0_35px_80px_rgba(59,7,21,0.28)]">
-                <WorkPhotoPlaceholder label="Made in Ghana" className="h-[620px] w-full rounded-[24px]" />
+                <img
+                  src="/images/work/custom-gown-purple-front.jpeg"
+                  alt="A richly colored custom gown displayed on a mannequin"
+                  className="h-[620px] w-full rounded-[24px] object-cover"
+                />
               </div>
             </motion.div>
           </div>
@@ -299,7 +274,11 @@ export default function App() {
                 className="group overflow-hidden rounded-[26px] border border-[#c49a3a]/60 bg-[#fff9f0] shadow-[0_25px_60px_rgba(59,7,21,0.08)]"
               >
                 <div className="overflow-hidden">
-                  <WorkPhotoPlaceholder label={service.title} className="h-52 w-full transition duration-500 group-hover:brightness-110" />
+                  <img
+                    src={service.image}
+                    alt={`${service.title} by Crown & Stitch`}
+                    className="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
                 </div>
                 <div className="space-y-4 p-5">
                   <h3 className="font-display text-2xl text-[#3b0715]">{service.title}</h3>
@@ -355,7 +334,7 @@ export default function App() {
                   transition={{ duration: 0.5, delay: index * 0.04 }}
                   className="overflow-hidden rounded-[26px] border border-[#c49a3a]/50 bg-[#fff9f0] shadow-[0_25px_60px_rgba(59,7,21,0.08)]"
                 >
-                  <WorkPhotoPlaceholder label={product.name} className="h-72 w-full" />
+                  <img src={product.image} alt={product.name} className="h-72 w-full object-cover" />
                   <div className="space-y-3 p-5">
                     <div className="flex items-center justify-between gap-3">
                       <div>
@@ -410,9 +389,10 @@ export default function App() {
               className="relative"
             >
               <div className="absolute inset-0 -translate-x-6 translate-y-6 rounded-[28px] bg-[#c49a3a]/30 blur-xl" aria-hidden="true" />
-              <WorkPhotoPlaceholder
-                label="Crown & Stitch"
-                className="relative h-[540px] w-full rounded-[28px] border border-[#c49a3a]/60 shadow-[0_35px_70px_rgba(59,7,21,0.18)]"
+              <img
+                src="/images/work/fascinator-gold-floral.jpeg"
+                alt="A handcrafted gold floral fascinator displayed on a mannequin"
+                className="relative h-[540px] w-full rounded-[28px] border border-[#c49a3a]/60 object-cover shadow-[0_35px_70px_rgba(59,7,21,0.18)]"
               />
             </motion.div>
           </div>
