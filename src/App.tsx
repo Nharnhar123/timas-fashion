@@ -71,6 +71,7 @@ const heroLooks = [
   { image: '/images/work/latest-collection/collection-17.jpeg', label: 'An elegant occasion look' },
   { image: '/images/work/latest-collection/collection-18.jpeg', label: 'Print with a modern touch' },
   { image: '/images/work/latest-collection/collection-19.jpeg', label: 'Style for every occasion' },
+  { image: '/images/work/kente-inspired-gown.png', label: 'Kente-inspired occasion gown' },
 ];
 
 const fadeUp = {
