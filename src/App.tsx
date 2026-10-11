@@ -69,6 +69,35 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
+function WorkPhotoPlaceholder({ label, className = '' }: { label: string; className?: string }) {
+  return (
+    <div
+      role="img"
+      aria-label={`Photos of ${label} from Crown & Stitch are coming soon`}
+      className={`relative isolate flex items-center justify-center overflow-hidden bg-[#3b0715] text-center ${className}`}
+    >
+      <div
+        className="absolute inset-0 z-0 opacity-75"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            'repeating-linear-gradient(45deg, transparent 0 18px, rgba(196,154,58,0.7) 18px 22px, transparent 22px 40px), repeating-linear-gradient(-45deg, transparent 0 30px, rgba(26,91,53,0.65) 30px 36px, transparent 36px 56px)',
+        }}
+      />
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#24040d]/90 via-[#3b0715]/35 to-[#3b0715]/15" aria-hidden="true" />
+      <div className="relative z-10 max-w-sm px-6 py-8 text-[#fff8f1]">
+        <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-[#e5c98b] bg-[#3b0715]/70 text-[#e5c98b]">
+          <Scissors size={20} />
+        </span>
+        <p className="font-display text-2xl">{label}</p>
+        <p className="mt-2 text-sm leading-relaxed text-[#f5e7d2]">
+          Our work photos are coming soon from Akwatia Akwadum.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<ProductFilter>('All');
@@ -225,11 +254,7 @@ export default function App() {
             >
               <div className="absolute -inset-4 rounded-[28px] bg-[radial-gradient(circle,rgba(196,154,58,0.25),transparent_65%)] blur-3xl" aria-hidden="true" />
               <div className="relative overflow-hidden rounded-[30px] border border-[#c49a3a]/80 bg-[#3b0715] p-4 shadow-[0_35px_80px_rgba(59,7,21,0.28)]">
-                <img
-                  src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
-                  alt="Woman in elegant African-inspired attire wearing a gold fascinator"
-                  className="h-[620px] w-full rounded-[24px] object-cover"
-                />
+                <WorkPhotoPlaceholder label="Made in Ghana" className="h-[620px] w-full rounded-[24px]" />
               </div>
             </motion.div>
           </div>
@@ -274,11 +299,7 @@ export default function App() {
                 className="group overflow-hidden rounded-[26px] border border-[#c49a3a]/60 bg-[#fff9f0] shadow-[0_25px_60px_rgba(59,7,21,0.08)]"
               >
                 <div className="overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
+                  <WorkPhotoPlaceholder label={service.title} className="h-52 w-full transition duration-500 group-hover:brightness-110" />
                 </div>
                 <div className="space-y-4 p-5">
                   <h3 className="font-display text-2xl text-[#3b0715]">{service.title}</h3>
@@ -334,7 +355,7 @@ export default function App() {
                   transition={{ duration: 0.5, delay: index * 0.04 }}
                   className="overflow-hidden rounded-[26px] border border-[#c49a3a]/50 bg-[#fff9f0] shadow-[0_25px_60px_rgba(59,7,21,0.08)]"
                 >
-                  <img src={product.image} alt={product.name} className="h-72 w-full object-cover" />
+                  <WorkPhotoPlaceholder label={product.name} className="h-72 w-full" />
                   <div className="space-y-3 p-5">
                     <div className="flex items-center justify-between gap-3">
                       <div>
@@ -389,10 +410,9 @@ export default function App() {
               className="relative"
             >
               <div className="absolute inset-0 -translate-x-6 translate-y-6 rounded-[28px] bg-[#c49a3a]/30 blur-xl" aria-hidden="true" />
-              <img
-                src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
-                alt="Tailored fashion portrait"
-                className="relative h-[540px] w-full rounded-[28px] border border-[#c49a3a]/60 object-cover shadow-[0_35px_70px_rgba(59,7,21,0.18)]"
+              <WorkPhotoPlaceholder
+                label="Crown & Stitch"
+                className="relative h-[540px] w-full rounded-[28px] border border-[#c49a3a]/60 shadow-[0_35px_70px_rgba(59,7,21,0.18)]"
               />
             </motion.div>
           </div>
@@ -492,7 +512,7 @@ export default function App() {
                   <MapPin className="mt-1 text-[#c49a3a]" size={18} />
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.15em] text-[#3b0715]">Location</p>
-                    <p className="text-[#4a0b1c]">Boadua, opposite Presby Senior High School</p>
+                    <p className="text-[#4a0b1c]">Akwatia Akwadum, Ghana</p>
                   </div>
                 </div>
               </div>
@@ -612,7 +632,7 @@ export default function App() {
               <li><a href={buildWhatsAppUrl('Business enquiry')} target="_blank" rel="noopener noreferrer" className="hover:text-[#e5c98b]">WhatsApp: 0241920331</a></li>
               <li><a href="tel:0539555343" className="hover:text-[#e5c98b]">Telephone: 0539555343 / 0241920331</a></li>
               <li><a href="https://www.tiktok.com/@crownandstitch_" target="_blank" rel="noopener noreferrer" className="hover:text-[#e5c98b]">TikTok: @crownandstitch_</a></li>
-              <li className="text-[#f7e7d4]">Location: Boadua, opposite Presby Senior High School</li>
+              <li className="text-[#f7e7d4]">Location: Akwatia Akwadum, Ghana</li>
             </ul>
           </div>
         </div>
